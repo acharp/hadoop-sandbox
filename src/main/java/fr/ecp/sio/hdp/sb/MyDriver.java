@@ -32,7 +32,10 @@ public class MyDriver extends Configured implements Tool{
     @Override
     public int run(String[] args) throws Exception {
 
-        final Job job = Job.getInstance(getConf(), "sample-job");
+        final Configuration configuration = new Configuration();
+
+        //final Job job = Job.getInstance(getConf(), "sample-job");
+        final Job job = Job.getInstance(configuration, "sample-job");
 
         job.setJarByClass(MyDriver.class);
 
@@ -45,6 +48,7 @@ public class MyDriver extends Configured implements Tool{
         job.setMapperClass((MyMapper.class));
         job.setMapOutputKeyClass(Text.class);
         job.setMapOutputValueClass(FloatWritable.class);
+        job.setReducerClass(MyReducer.class);
         job.setNumReduceTasks(1);
 
         job.submit();
