@@ -45,11 +45,15 @@ public class MyDriver extends Configured implements Tool{
         //FileOutputFormat.setOutputPath(job, new Path(args[1]));
         FileOutputFormat.setOutputPath(job, new Path("/tmp/test.out"));
 
+         /**
         job.setMapperClass((MyMapper.class));
         job.setMapOutputKeyClass(Text.class);
         job.setMapOutputValueClass(FloatWritable.class);
         job.setReducerClass(MyReducer.class);
         job.setNumReduceTasks(1);
+         **/
+
+        job.setPartitionerClass(SiteBasedPartitionner.class);
 
         job.submit();
         int exitCode = job.waitForCompletion(true) ? 0 : 1;
