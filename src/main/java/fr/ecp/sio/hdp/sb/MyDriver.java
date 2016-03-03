@@ -3,6 +3,8 @@ package fr.ecp.sio.hdp.sb;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.conf.Configured;
 import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.io.FloatWritable;
+import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.input.TextInputFormat;
@@ -35,11 +37,15 @@ public class MyDriver extends Configured implements Tool{
         job.setJarByClass(MyDriver.class);
 
         job.setInputFormatClass(TextInputFormat.class);
-        FileInputFormat.addInputPath(job, new Path(args[0]));
-        FileOutputFormat.setOutputPath(job, new Path(args[1]));
+        //FileInputFormat.addInputPath(job, new Path(args[0]));
+        FileInputFormat.addInputPath(job, new Path("/tmp/test.in3"));
+        //FileOutputFormat.setOutputPath(job, new Path(args[1]));
+        FileOutputFormat.setOutputPath(job, new Path("/tmp/test.out"));
 
         job.setMapperClass((MyMapper.class));
-        job.setNumReduceTasks(0);
+        job.setMapOutputKeyClass(Text.class);
+        job.setMapOutputValueClass(FloatWritable.class);
+        job.setNumReduceTasks(1);
 
         job.submit();
         int exitCode = job.waitForCompletion(true) ? 0 : 1;
